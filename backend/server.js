@@ -7,9 +7,19 @@ const { seedMongo, seedMemory } = require("./controllers/companyController");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const origin = process.env.FRONTEND_ORIGIN || "https://credit-intelligence-pi.vercel.app/";
-
-app.use(cors({ origin }));
+const origin = process.env.FRONTEND_ORIGIN;
+const allowedOrigins = [origin, "https://credit-intelligence-pi.vercel.app"];
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no Origin (like server-to-server) or from allowed origins
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    // For origins with trailing slash, normalize before check
+    const normalized = origin.replace(/\/*$/, "");
+    if (allowedOrigins.includes(normalized)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  }
+}));
 app.use(express.json());
 
 app.use("/api", routes);
