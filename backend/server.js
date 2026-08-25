@@ -7,7 +7,7 @@ const { seedMongo, seedMemory } = require("./controllers/companyController");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const origin = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
+const origin = process.env.FRONTEND_ORIGIN || "https://credit-intelligence-pi.vercel.app/";
 
 app.use(cors({ origin }));
 app.use(express.json());
